@@ -7,7 +7,7 @@ function randomInt(min = 0, max = 100) {
     return Math.round(Math.random() * (max - min) + min);
 }
 
-const ABC = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+:,.?/`\\|';
+const ABC = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$';
 
 function randomString(number = 20) {
     let sb = "";

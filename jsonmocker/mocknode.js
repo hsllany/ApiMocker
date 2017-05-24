@@ -1,12 +1,13 @@
-const StringRule = require('./StringRule');
-const IntRule = require('./intrule');
-const BooleanRule = require('./booleanrule');
-const NullRule = require('./nullrule')
+const rule = require('./rule');
+
+const StringRule = rule.RandomStringRule;
+const IntRule = rule.RandomIntRule;
+const BooleanRule = rule.RandomBooleanRule;
+const NullRule = rule.RandomNullRule;
 
 module.exports = MockNode;
 
-function MockNode(key) {
-    this.key = key;
+function MockNode() {
     this.rule = undefined;
 }
 
@@ -14,20 +15,19 @@ MockNode.prototype.setRule = function (rule) {
     this.rule = rule;
 }
 
-MockNode.prototype.get = function () {
+MockNode.prototype.get = function (val) {
     let cur = this.rule;
-    let obj = null;
+    let obj = val;
 
     while (cur != undefined) {
         obj = cur.apply(obj);
         cur = cur.next;
     }
 
-    return MockNode.toJsonString(this.key, obj);
+    return MockNode.toJsonString(obj);
 }
 
-MockNode.toJsonString = function (key, obj) {
-    let json = '"' + key + '" : ';
+MockNode.toJsonString = function (obj) {
     let val = '';
     if (obj === null) {
         val = 'null';
@@ -37,8 +37,7 @@ MockNode.toJsonString = function (key, obj) {
         val = '"' + obj + '"';
     }
 
-    json += val;
-    return json;
+    return val;
 }
 
 MockNode.buildStringRuleTo = function (node) {
@@ -49,8 +48,8 @@ MockNode.buildIntRuleTo = function (node) {
     MockNode.buildRuleTo(node, new IntRule());
 }
 
-MockNode.buildNullRuleTo = function (node) {
-    MockNode.buildRuleTo(node, new NullRule());
+MockNode.buildNullRuleTo = function (node, nullpercent = 0.5) {
+    MockNode.buildRuleTo(node, new NullRule(nullpercent));
 }
 
 MockNode.buildBooleanRuleTo = function (node) {

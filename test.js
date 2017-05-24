@@ -1,11 +1,27 @@
 /**
  * Created by leeco on 17/5/23.
  */
-var MockNode = require("./jsonmocker/mocknode")
+const JsonTree = require('./jsonmocker/json');
+const MockNode = require('./jsonmocker/mocknode');
 
-console.log('hello world');
+let a  ="string";
+console.log(a instanceof Object);
 
-let node = new MockNode("hello world");
+let jt = new JsonTree();
 
+let node = new MockNode("test");
 MockNode.buildStringRuleTo(node);
-console.log(node.get());
+jt._mockNodes.push(node);
+MockNode.buildStringRuleTo(jt._mockNodes);
+
+jt.key = "a";
+
+let jtChild = new JsonTree();
+let nodeChild = new MockNode("testChild");
+MockNode.buildStringRuleTo(nodeChild);
+jtChild._mockNodes.push(nodeChild);
+jtChild.key = "child";
+
+jt._children.push(jtChild);
+
+console.log(jt.toJsonString());
