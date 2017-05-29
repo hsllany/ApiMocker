@@ -1,83 +1,83 @@
 'use strict';
 
+let mock = require('./mocker');
+
 module.exports = {
-    JsonObject: JsonObject,
-    JsonArray: JsonArray,
-    JsonItem: JsonItem
+    JsonObject: JsonObject, JsonArray: JsonArray, JsonItem: JsonItem
 }
 
-function JsonObject() {
-    // to hold JsonItem
-    this.children = [];
+class JsonObject {
+    /**
+     * @param mocker should be one of 'function' or a piece of script string.
+     */
+    constructor() {
+        this.children = [];
+        this.mocker = null;
+    }
+
+    add(jsonItem) {
+        this.children.push(jsonItem)
+    }
+
+    toJsonString() {
+        let sb = '{';
+        let childrenMocked = (this.mocker != null ? mock.run(this, this.mocker) : this.children );
+        for (let i = 0; i < childrenMocked.length; i++) {
+            let child = childrenMocked[i];
+            sb += child.toJsonString();
+            if (i < childrenMocked.length - 1) {
+                sb += ', ';
+            }
+        }
+        sb += '}';
+        return sb;
+    }
 }
 
-JsonObject.prototype.add = function (jsonItem) {
-    this.children.push(jsonItem);
+
+class JsonArray {
+    constructor() {
+        this.children = [];
+        this.mocker = null;
+    }
+
+    add(jsonItem) {
+        this.children.push(jsonItem)
+    }
+
+    toJsonString() {
+        let sb = '[';
+        for (let i = 0; i < this.children.length; i++) {
+            let childrenMocked = (this.mocker != null ? mock.run(this, this.mocker) : this.children );
+            sb += childrenMocked.toJsonString();
+            if (i < childrenMocked.length - 1) {
+                sb += ', ';
+            }
+        }
+        sb += ']';
+        return sb;
+    }
 }
 
-JsonObject.prototype.toJsonString = function () {
-    let sb = '{';
+class JsonItem {
+    constructor(key) {
+        this.key = key;
+        this.mocker = null;
+    }
 
-    for (let i = 0; i < this.children.length; i++) {
-        let child = this.children[i];
-
-        sb += child.toJsonString();
-
-        if (i < this.children.length - 1) {
-            sb += ', ';
+    toJsonString() {
+        if (this.key !== null && this.key !== undefined) {
+            return '"' + this.key + '" : ' + this.mocker !== null ? toJson(mock.run(this, this.mocker)) : toJson('notmocked');
+        } else {
+            return this.mocker !== null ? toJson(mock.run(this, this.mocker)) : toJson('notmocked');
         }
     }
-
-    sb += '}';
-    return sb;
-};
-
-function JsonArray() {
-    this.children = [];
-}
-JsonArray.prototype.add = JsonObject.prototype.add;
-JsonArray.prototype.toJsonString = function () {
-    let sb = '[';
-    for (let i = 0; i < this.children.length; i++) {
-        let child = this.children[i];
-
-        sb += child.toJsonString();
-
-        if (i < this.children.length - 1) {
-            sb += ', ';
-        }
-    }
-
-    sb += ']';
-    return sb;
-};
-
-function JsonItem(key, value, mocknode) {
-    this.key = key;
-    this.value = value;
-    this.mockNode = mocknode;
 }
 
-JsonItem.prototype.toJsonString = function () {
-    if (this.key !== null && this.key !== undefined) {
-        return '"' + this.key + '" : ' + smartToString(this.value, this.mockNode);
+function toJson(value) {
+    if (typeof value === 'string') {
+        return '"' + value + '"';
     } else {
-        return smartToString(this.value, this.mockNode);
-    }
-};
-
-function smartToString(val, mocknode) {
-    if (mocknode != null) {
-        return mocknode.get(val);
-    }
-    if (val == null) {
-        return 'null';
-    }
-    if (val instanceof JsonObject) {
-        return val.toJsonString();
-    } else if (typeof val == 'string') {
-        return '"' + val + '"';
-    } else {
-        return val;
+        return value;
     }
 }
