@@ -2,10 +2,7 @@
  * Created by leeco on 17/5/24.
  */
 
-const json = require('./jsonmocker/json');
-const MockNode = require('./jsonmocker/mocker');
-let node = new MockNode();
-MockNode.buildStringRuleTo(node);
+const json = require('../jsonmocker/json');
 
 let jsonItem = new json.JsonItem("he", "world");
 console.log(jsonItem.toJsonString());

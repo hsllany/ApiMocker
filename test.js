@@ -5,7 +5,7 @@ let a = {
     b: "hello world"
 };
 
-let mock = require('./jsonmocker/mocker');
+let mock = require('./jsonmocker/mockerfactory');
 
 function aa() {
     console.log(this.b);

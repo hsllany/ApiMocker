@@ -3,7 +3,7 @@
  */
 
 let json = require('./../jsonmocker/json');
-let mocker = require('./../jsonmocker/mocker');
+let mocker = require('../jsonmocker/mockerfactory');
 
 //=================jsonItem example=================
 
@@ -17,6 +17,7 @@ console.log('=====================\n');
 //=================jsonTree example=================
 
 let item2 = new json.JsonItem("keyTwo");
+item2.mocker = mocker.buildRandomEnumFunction("nihao", 123, false);
 
 let tree = new json.JsonObject();
 tree.add(item1);
@@ -24,14 +25,13 @@ tree.add(item2);
 
 
 let childTree = new json.JsonObject();
-
 let childItem1 = new json.JsonItem("childKeyOne");
-childItem1.setValue("childValueOne");
+childItem1.setValueOrMocker("childValueOne");
 
 childTree.add(childItem1);
 
 let childTreeItem = new json.JsonItem("childTree");
-childTreeItem.setValue(childTree);
+childTreeItem.setValueOrMocker(childTree);
 
 tree.add(childTreeItem);
 console.log(tree.toJsonString());

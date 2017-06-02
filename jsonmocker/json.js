@@ -19,7 +19,9 @@ function run(object, mock) {
 
         if (typeof value === 'string') {
             return '"' + value + '"';
-        } else {
+        } else if(value instanceof JsonArray || value instanceof JsonObject){
+            return value.toJsonString();
+        }else {
             return value;
         }
     } else {
@@ -77,9 +79,10 @@ class JsonArray {
 
     toJsonString() {
         let sb = '[';
-        for (let i = 0; i < this.children.length; i++) {
-            let childrenMocked = (this.mocker != null ? mocker.run(this, this.mocker) : this.children );
-            sb += childrenMocked.toJsonString();
+        let childrenMocked = (this.mocker != null ? mocker.run(this, this.mocker) : this.children );
+        for (let i = 0; i < childrenMocked.length; i++) {
+            let child = childrenMocked[i];
+            sb += child.toJsonString();
             if (i < childrenMocked.length - 1) {
                 sb += ', ';
             }
@@ -95,9 +98,16 @@ class JsonItem {
         this.mocker = null;
     }
 
-    setValue(value) {
-        this.value = value;
-        this.mocker = raw;
+    setValueOrMocker(value) {
+        if (typeof value === 'function') {
+            this.mocker = value;
+        } else if (value instanceof JsonObject || value instanceof JsonArray) {
+            this.value = value;
+            this.mocker = raw;
+        } else {
+            this.value = value;
+            this.mocker = raw;
+        }
     }
 
     toJsonString() {

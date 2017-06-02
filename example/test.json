@@ -1,0 +1,26 @@
+{
+  "modules": [
+    {
+      "name": "student",
+      "data": {
+        "age": "r)",
+        "name": "-> randomString()",
+        "sex": "->randomEnum(boy, girl)",
+        "constant": 123
+      }
+    },
+    {
+      "name": "group",
+      "data":{
+        "students":"->arrayOf(student)"
+      }
+    }
+  ],
+  "main_module": {
+    "name": "class",
+    "data": {
+      "class_name": "randomString()",
+      "students": "randomArrayOf(#student)"
+    }
+  }
+}
