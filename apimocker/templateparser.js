@@ -113,8 +113,8 @@ let singleValueParser = {
         functionNameToBeMocked = functionNameToBeMocked.toUpperCase() + functionAndParams.name.substring(1);
         functionNameToBeMocked = 'build' + functionNameToBeMocked;
 
-        if (MockerFactory.hasOwnProperty(functionNameToBeMocked) && typeof MockerFactory[functionNameToBeMocked] === 'function') {
-            return MockerFactory[functionNameToBeMocked](functionAndParams.params, template);
+        if (MockerFactory.internal.hasOwnProperty(functionNameToBeMocked) && typeof MockerFactory.internal[functionNameToBeMocked] === 'function') {
+            return MockerFactory.internal[functionNameToBeMocked](functionAndParams.params, template);
         }
 
         return '![NOT MOCKED]';
@@ -137,10 +137,10 @@ class TemplateParser {
      * check whether this data is right
      */
     _check() {
-        if (this.rawData.hasOwnProperty('main_module')) {
-            TemplateParser._checkMainModule(this.rawData["main_module"]);
+        if (this.rawData.hasOwnProperty('main')) {
+            TemplateParser._checkMainModule(this.rawData["main"]);
         } else {
-            throw 'ApiTemplate must have main_module field.'
+            throw 'ApiTemplate must have main field.'
         }
 
         if (this.rawData.hasOwnProperty("modules")) {
@@ -155,8 +155,19 @@ class TemplateParser {
             this.processModules(template);
         }
 
+        this.processMainModule(template);
+
         //TODO handle the main_module parts
         return template;
+    }
+
+    processMainModule(template) {
+        let main = this.rawData.main;
+        template.mainName = main.name;
+
+        let mainData = main.data;
+
+        template.main = TemplateParser.processData(mainData, template);
     }
 
     processModules(template) {

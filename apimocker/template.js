@@ -6,7 +6,7 @@ const json = require('./json');
 
 class Template {
     constructor() {
-        this.mainJsonTree = null;
+        this.main = null;
         this.modules = [];
     }
 

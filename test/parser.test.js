@@ -14,3 +14,8 @@ console.log(template.modules["student"].toJsonString());
 let jsonObject = template.modules['group'];
 
 console.log(jsonObject.toJsonString());
+
+let mainObject = template.main;
+
+console.log('\n');
+console.log(mainObject.toJsonString());
