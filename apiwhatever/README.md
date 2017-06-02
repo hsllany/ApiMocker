@@ -27,24 +27,25 @@ In real life, a class usually contains many small groups, and each group contain
 		++ students 
 ```
 
-```
+```json
 {
   "modules": [
     {
       "name": "student",
-      "filter":"->removeField(age)",
       "data": {
-        "age": null,
+        "age": "->randomInt(18, 20)",
         "name": "-> randomString()",
         "sex": "->randomEnum(boy, girl)",
-        "constant": 123
+        "height": "->randomNumber(12.3, 55.8)",
+        "isTransfer": "->randomBoolean()",
+        "constant": null
       }
     },
     {
       "name": "group",
-      "data":{
-        "name":"->randomString()",
-        "students":"->randomArrayOf(student)"
+      "data": {
+        "name": "->randomString()",
+        "students": "->randomArrayOf(student)"
       }
     }
   ],
@@ -52,7 +53,7 @@ In real life, a class usually contains many small groups, and each group contain
     "name": "class",
     "data": {
       "class_name": "->randomString()",
-      "status":200,
+      "status": 200,
       "groups": "->randomArrayOf(group)"
     }
   }
@@ -61,7 +62,7 @@ In real life, a class usually contains many small groups, and each group contain
 
 Just run:
 
-```
+```javascript
 const apiwhatever = require('./../apiwhatever');
 
 // json will be some json string or js object
@@ -72,172 +73,169 @@ console.log(apiwhatever.mock(json));
 
 And this will generate following json, every time is different:
 
-```
+```json
 {
-    "class_name": "kr9x@njq!GvbA312q8p@VGtiZ#cXbY5Qo3xCqiDtjf0p5cP5ui0Qlw0HA7noH",
+    "class_name": "#lefy8n25wvFFuNXAm881SYuUqCJoJjNhuObW14WSIBP!lHQbH7FK3VIPwhGJ#1$q",
     "status": 200,
     "groups": [
         {
-            "name": "8qFp06OPBueLtB",
+            "name": "WZ@LaFXVHUlUXS9d1ivzofEQZCRsxucxoRY2MoD0R9GEvLMXX5PvN96AV9LLyx",
             "students": [
                 {
-                    "name": "LilyU#dKh3X5dbC!JMkZ1@nh717TlSq@UP1Nuy8NF7s2pm6yDgj8ueSw2Og",
+                    "age": 20,
+                    "name": "Wn2SD#KAjbTMD8b#DgK@o0jOmw1RIIhEgDVP9cKhNxF1jKEXp@8B7F#WVJO",
                     "sex": "boy",
-                    "constant": 123
+                    "height": 45.11309245423034,
+                    "isTransfer": true,
+                    "constant": null
                 },
                 {
-                    "name": "UY4YuIMplFrpuAEPkKJo#BXPJ#gx@2HdTt",
-                    "sex": " girl",
-                    "constant": 123
+                    "age": 19,
+                    "name": "KbBY5UYYr$NnxiQrb1SrhFVRxgiDkw@1Gv!GNtgvZM$GYnGrngdKM3DU4R1R1EznObmU@K@HaURQ$r2qwvOsYi6KnLboFY@oZvE",
+                    "sex": "girl",
+                    "height": 22.820040667878366,
+                    "isTransfer": false,
+                    "constant": null
                 },
                 {
-                    "name": "VvOWwYH#UFZUT8z0fTUqbpk1tDmiRbe7Qz#Z!uiskxPWQmzymUcBChH3u2y",
-                    "sex": " girl",
-                    "constant": 123
+                    "age": 18,
+                    "name": "QvPL5MyMGLCo79eIGkKtI7Y3HY7#PZzrpIc6T!fgDjM@jeK3RWBo$qQlx@bOVnA!",
+                    "sex": "girl",
+                    "height": 23.703508422117288,
+                    "isTransfer": true,
+                    "constant": null
                 },
                 {
-                    "name": "fwyolrAM1nUGsuReEur30M5dAwd5p0XvpYQ0!ksA4kToEESL@9y4OnBSp",
+                    "age": 19,
+                    "name": "o#Q",
+                    "sex": "girl",
+                    "height": 13.932977897753005,
+                    "isTransfer": true,
+                    "constant": null
+                },
+                {
+                    "age": 18,
+                    "name": "z30xr$2QVZvq9Lte$K6guKb6hz3oTyFEVH9X",
                     "sex": "boy",
-                    "constant": 123
+                    "height": 31.73755185343509,
+                    "isTransfer": false,
+                    "constant": null
                 },
                 {
-                    "name": "@6pUC83GVfUqEpVLqN76cq8ZAVAEQ1CP#DE8mUDsNhD",
-                    "sex": "boy",
-                    "constant": 123
+                    "age": 20,
+                    "name": "BDMg21ksGUgG3WkWiS0Do9UBG8UD4qZBRoQOtN",
+                    "sex": "girl",
+                    "height": 41.80127273802158,
+                    "isTransfer": false,
+                    "constant": null
                 }
             ]
         },
         {
-            "name": "r@jFziBXls10FNWy7ee72#tVk#",
-            "students": []
-        },
-        {
-            "name": "UcGZzIrmBm0BxkC!hnEEP9h0jMR",
+            "name": "bRRBgONuc!H@!h0yls",
             "students": [
                 {
-                    "name": "hTtXZUvBNeL2dX13GxMkxYJb4wBJ#97MXSk8HArp3gjH#jPhNx8vGwjbP4rM#9UwXUnME1iuA$M4@hM89sdWLFg4GHIHDP4m6",
-                    "sex": " girl",
-                    "constant": 123
-                },
-                {
-                    "name": "c6Sh7sMkk!mcQbEzxrvzvvBIJtTx52l",
-                    "sex": " girl",
-                    "constant": 123
-                },
-                {
-                    "name": "$sc#OtHleXyEi387R",
-                    "sex": " girl",
-                    "constant": 123
-                },
-                {
-                    "name": "aiQEqTMfzRp8gMP4ENlU",
+                    "age": 19,
+                    "name": "#Cyy6Rq08YoR5zhpOAMoXp0PehGeP8s9@e56oiDtj58ZvSdm2qc#P6PDIwcPTuln4L7oi0",
                     "sex": "boy",
-                    "constant": 123
-                },
-                {
-                    "name": "zNZG9510BtHor$BdTFRnANS3rDw6IS8kuNuCoPT#@QTzA27RgM8IlwkqlNR#UNt4gwSEuk0rHjwqv65i",
-                    "sex": " girl",
-                    "constant": 123
-                },
-                {
-                    "name": "fZZIuCc@0k4u60LNDbAQRt@99zyqrsuNnKyc6IH27c#oyzUgglN1h9tRV85y6Nje1JzaURUE1q5UDMdUiHGsCV027G514",
-                    "sex": " girl",
-                    "constant": 123
+                    "height": 51.013455479650915,
+                    "isTransfer": true,
+                    "constant": null
                 }
             ]
         },
         {
-            "name": "k5pw$!#WGzVA#ZT1P7klq!UmT!FlKJfnm",
+            "name": "zSok9pKjJb4hxwKQREzxkrH00D",
             "students": [
                 {
-                    "name": "B8B!3jJsM3w@4KCjyp@q97cc",
+                    "age": 20,
+                    "name": "vwCljGRbUEDjnIU@Y$s",
+                    "sex": "girl",
+                    "height": 52.93717182201591,
+                    "isTransfer": true,
+                    "constant": null
+                },
+                {
+                    "age": 20,
+                    "name": "pdz5p#HeInyN0BoXKY@gjgZQRj6RDlUEJQVGswJJqGXwe60A#OTsFI9dNWdRJrl5e38YKBw8xwKyRRQdkwbt",
                     "sex": "boy",
-                    "constant": 123
+                    "height": 52.2527907569993,
+                    "isTransfer": false,
+                    "constant": null
                 }
             ]
         },
         {
-            "name": "aDLWNW6E#N9ADpz5MMhMrA5Izuvp3EQ0rlfvKndZz5qlhLCKNmDMyYNU",
+            "name": "Y1H36mzI02emnZoljtK",
             "students": [
                 {
-                    "name": "ZlGTPYuUCkQPJZBb@JUkIpgrY",
-                    "sex": " girl",
-                    "constant": 123
+                    "age": 19,
+                    "name": "5Pdwx1hnOupv9oLP6M9@ss",
+                    "sex": "girl",
+                    "height": 40.55302286092741,
+                    "isTransfer": true,
+                    "constant": null
                 },
                 {
-                    "name": "1dvnBxbQhtsyKcqGRrcAxNusy6@cYAh@c8f!#xv",
-                    "sex": " girl",
-                    "constant": 123
+                    "age": 20,
+                    "name": "1f@eBMgfPOliVF@zxnkAY3iIhXnu@ZX5tpM2rpoiU!1yg5x5vjb#8uU8QvQxQtfs4",
+                    "sex": "boy",
+                    "height": 28.369941623889815,
+                    "isTransfer": true,
+                    "constant": null
+                },
+                {
+                    "age": 19,
+                    "name": "yMg0IDExq4tDL!jHmWCi#ZFECyAui1D#9JpRtk3o04ec!MljCf7DBCT9tvLZdd9fope#UvET3!g3",
+                    "sex": "boy",
+                    "height": 39.50936796253999,
+                    "isTransfer": true,
+                    "constant": null
+                },
+                {
+                    "age": 19,
+                    "name": "2sl1h0EI2fAJR#@JNvkouszgNmGB7nexkzcWmFmLy8DX0eeIA!v7bHXMSV9COHEGMHjB1BrPt5P0rNFXww6#Io$",
+                    "sex": "boy",
+                    "height": 32.71841019782172,
+                    "isTransfer": false,
+                    "constant": null
                 }
             ]
         },
         {
-            "name": "vR6Zj87TXEGnjh@kwe5rznVVhbGiV#xnUqlzVpN#PLBMGWFGXob6kPJgi!Ny8xF9AEx!C@ToIDjsQrjbzh4OLETtusY$Zk",
+            "name": "I#2mn8PCz@kQFo9SKzMZAylN1opfu",
             "students": [
                 {
-                    "name": "npXEgggHk1XxBbF",
+                    "age": 18,
+                    "name": "#U@wMN9kgTeEHKeeZCL#ZIsQ98DQx!!Vpq9ENhtRZfxzCACrqNDXIdWcICuPKZG4ipOCal#fbkauhKP05Uz8XoqG@##",
+                    "sex": "girl",
+                    "height": 35.4239864695043,
+                    "isTransfer": false,
+                    "constant": null
+                },
+                {
+                    "age": 18,
+                    "name": "Odp9eyeAA1KQLPL6zW@kMEZISeWjnEAyFDCJjctr1qty1ACqVnC6S",
                     "sex": "boy",
-                    "constant": 123
+                    "height": 38.173861262125016,
+                    "isTransfer": false,
+                    "constant": null
                 },
                 {
-                    "name": "8QI@gvMciYg3Uz2Nvf!OS7R$Xw41pxtCC1fftMyrvPDJPmAVHOrOCtal#oBeb1Fhx0Km1OmdlYO@HRgIcgXcfYJhctDQVyt4EufD",
-                    "sex": "boy",
-                    "constant": 123
+                    "age": 19,
+                    "name": "NdD2IAGX75CkU0qhKfNjK@tw13FYjkIXJF863jaEE@h@jL9oJ6GlT2kMjwIAv07i@u91Tr3xKVD",
+                    "sex": "girl",
+                    "height": 47.373799504884985,
+                    "isTransfer": false,
+                    "constant": null
                 },
                 {
-                    "name": "BqnJGskz",
-                    "sex": " girl",
-                    "constant": 123
-                },
-                {
-                    "name": "1dnZkc6oPRukTb9f@qh6mjqFM0JMgincgs#UhxveW1qp7Yo2Nx!t6B0hV1jIw2LmQxyM$YkU",
-                    "sex": " girl",
-                    "constant": 123
-                },
-                {
-                    "name": "YCed@S2D7VAfnLK6w8EFIt95NX68HSf#46EHJ8ZR!ATfpo7RmyOaNiKo57DFA8!Ne924u",
-                    "sex": "boy",
-                    "constant": 123
-                },
-                {
-                    "name": "kwdgme2MIA1b5tigKOkqjaWN0Gu037sqiTrGEN",
-                    "sex": " girl",
-                    "constant": 123
-                },
-                {
-                    "name": "JtICO@1SWZtOvHFMWdQDWsyfvL2oHvQAr5SD",
-                    "sex": " girl",
-                    "constant": 123
-                }
-            ]
-        },
-        {
-            "name": "dAUQUTs#GqCisyHDXK0WpNRBYHd$tgoL!LpZQm7JdKprE91WUAxhL$b#Ja",
-            "students": [
-                {
-                    "name": "i7mg@7d!M0mYY$Xsd9Tuv98sZgCz@gF8YSO27#!2",
-                    "sex": " girl",
-                    "constant": 123
-                },
-                {
-                    "name": "CFML8H@",
-                    "sex": "boy",
-                    "constant": 123
-                },
-                {
-                    "name": "wT7GSpE4f!SRldpZToj3QzA0rWqvBX#4nJSK13PEDs6V!KNr3WqHlD5$c!z#WjGQ9MM",
-                    "sex": " girl",
-                    "constant": 123
-                },
-                {
-                    "name": "M7l4fsCXnk!eX26zQV$p7QfrhIWMgad#dkK9QWYVbWZOuiWLYHk8LrBLB5F$35A9tYDmaD0rpZlP5083BGr3KYWWqVIx",
-                    "sex": "boy",
-                    "constant": 123
-                },
-                {
-                    "name": "tGUqQXFD8uDOtUe00",
-                    "sex": " girl",
-                    "constant": 123
+                    "age": 19,
+                    "name": "SNBYWQwPAJ8C44P2qC0lWZGN1Dt@YFRfPaK6Eit7eXXM9v@P#2JITcmJ",
+                    "sex": "girl",
+                    "height": 34.28512972033984,
+                    "isTransfer": false,
+                    "constant": null
                 }
             ]
         }
