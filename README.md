@@ -21,7 +21,7 @@ In real life, a class usually contains many small groups, and each group contain
 		++ students 
 ```
 
-```
+```json
 {
   "modules": [
     {
@@ -55,7 +55,7 @@ In real life, a class usually contains many small groups, and each group contain
 
 Just run:
 
-```
+```javascript
 const apiwhatever = require('./../apiwhatever');
 
 // json will be some json string or js object
@@ -66,7 +66,7 @@ console.log(apiwhatever.mock(json));
 
 And this will generate following json, every time is different:
 
-```
+```json
 {
     "class_name": "kr9x@njq!GvbA312q8p@VGtiZ#cXbY5Qo3xCqiDtjf0p5cP5ui0Qlw0HA7noH",
     "status": 200,
