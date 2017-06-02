@@ -12,7 +12,8 @@
     {
       "name": "group",
       "data":{
-        "students":"->arrayOf(student)"
+        "name":"->randomString()",
+        "students":"->randomArrayOf(student)"
       }
     }
   ],
@@ -21,7 +22,7 @@
     "data": {
       "class_name": "->randomString()",
       "status":200,
-      "students": "->randomArrayOf(student)"
+      "groups": "->randomArrayOf(group)"
     }
   }
 }

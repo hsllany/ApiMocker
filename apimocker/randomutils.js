@@ -1,6 +1,3 @@
-/**
- * Created by leeco on 17/5/23.
- */
 'use strict';
 
 function randomInt(min = 0, max = 100) {

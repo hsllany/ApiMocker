@@ -1,7 +1,3 @@
-/**
- * Created by leeco on 17/5/24.
- */
-
 const json = require('./json');
 const MockerFactory = require('./mockerfactory');
 const Template = require('./template');
@@ -117,7 +113,7 @@ let singleValueParser = {
             return MockerFactory.internal[functionNameToBeMocked](functionAndParams.params, template);
         }
 
-        return '![NOT MOCKED]';
+        return '![NotImplemented : ' + functionAndParams.name + ']';
     }
 };
 
@@ -256,8 +252,8 @@ class TemplateParser {
         }
     };
 
-    static _isValidField(field){
-        if(typeof field === 'object'){
+    static _isValidField(field) {
+        if (typeof field === 'object') {
             return field === null || field === undefined;
         }
 

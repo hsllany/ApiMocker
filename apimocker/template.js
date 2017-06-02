@@ -1,8 +1,3 @@
-/**
- * Created by leeco on 17/5/31.
- */
-
-const json = require('./json');
 
 class Template {
     constructor() {
