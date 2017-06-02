@@ -4,6 +4,10 @@ function randomInt(min = 0, max = 100) {
     return Math.round(Math.random() * (max - min) + min);
 }
 
+function randomNumber(min = 0, max = 100) {
+    return Math.random() * (max - min) + min;
+}
+
 const ABC = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$';
 
 function randomString(number = 20) {
@@ -28,3 +32,4 @@ function randomBoolean() {
 exports.randomInt = randomInt;
 exports.randomString = randomString;
 exports.randomBoolean = randomBoolean;
+exports.randomNumber = randomNumber;

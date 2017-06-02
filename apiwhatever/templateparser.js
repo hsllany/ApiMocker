@@ -103,6 +103,10 @@ let singleValueParser = {
                 if (stringBuilder !== '') {
                     params.push(stringBuilder);
                 }
+
+                if (c === ',') {
+                    first = true;
+                }
                 stringBuilder = '';
 
                 if (c === ')') {
@@ -125,7 +129,10 @@ let singleValueParser = {
         functionNameToBeMocked = 'build' + functionNameToBeMocked;
 
         if (MockerFactory.mocker.hasOwnProperty(functionNameToBeMocked) && typeof MockerFactory.mocker[functionNameToBeMocked] === 'function') {
-            return MockerFactory.mocker[functionNameToBeMocked](functionAndParams.params, template);
+            let mockParams = [];
+            mockParams.push(template);
+            mockParams = mockParams.concat(functionAndParams.params);
+            return MockerFactory.mocker[functionNameToBeMocked].apply(null, mockParams);
         }
 
         return '![NotImplemented : ' + functionAndParams.name + ']';
@@ -137,7 +144,10 @@ let singleValueParser = {
         functionNameToBeMocked = 'build' + functionNameToBeMocked;
 
         if (MockerFactory.filter.hasOwnProperty(functionNameToBeMocked) && typeof MockerFactory.filter[functionNameToBeMocked] === 'function') {
-            return MockerFactory.filter[functionNameToBeMocked](functionAndParams.params, template);
+            let mockParams = [];
+            mockParams.push(template);
+            mockParams = mockParams.concat(functionAndParams.params);
+            return MockerFactory.filter[functionNameToBeMocked].apply(null, mockParams);
         }
 
         return null;

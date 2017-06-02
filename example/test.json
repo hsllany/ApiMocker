@@ -2,19 +2,20 @@
   "modules": [
     {
       "name": "student",
-      "filter":"->removeField(age)",
       "data": {
-        "age": null,
+        "age": "->randomInt(18, 20)",
         "name": "-> randomString()",
         "sex": "->randomEnum(boy, girl)",
-        "constant": 123
+        "height": "->randomNumber(12.3, 55.8)",
+        "isTransfer": "->randomBoolean()",
+        "constant": null
       }
     },
     {
       "name": "group",
-      "data":{
-        "name":"->randomString()",
-        "students":"->randomArrayOf(student)"
+      "data": {
+        "name": "->randomString()",
+        "students": "->randomArrayOf(student)"
       }
     }
   ],
@@ -22,7 +23,7 @@
     "name": "class",
     "data": {
       "class_name": "->randomString()",
-      "status":200,
+      "status": 200,
       "groups": "->randomArrayOf(group)"
     }
   }
