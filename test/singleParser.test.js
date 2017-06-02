@@ -1,9 +1,9 @@
 /**
  * Created by leeco on 17/6/1.
  */
-var TemplateParser = require('./../jsonmocker/templateparser');
+var TemplateParser = require('../apimocker/templateparser');
 var singleValueParser = TemplateParser.singleParser;
-var Template = require('./../jsonmocker/template');
+var Template = require('../apimocker/template');
 
 var template = new Template();
 
