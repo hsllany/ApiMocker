@@ -22,7 +22,7 @@ function run(json, mockFunction) {
             return value;
         }
     } else {
-        throw 'Unknown mock type, must be \'function\'';
+        throw 'Unknown mock type, must be \'function\'' + mockFunction + ' of ' + json.toString();
     }
 }
 
@@ -66,7 +66,7 @@ class JsonObject {
         }
 
         if (findIndex !== -1) {
-            this.children.splice(findIndex, 1);
+            this.children[findIndex].silence = true;
         }
     }
 
@@ -77,14 +77,21 @@ class JsonObject {
             this._filter.call(this);
         }
 
-
+        let first = true;
         for (let i = 0; i < this.children.length; i++) {
             let child = this.children[i];
+
+            if (child.silence) {
+                continue;
+            }
+
             if (child instanceof JsonItem) {
-                sb += child.toJsonString();
-                if (i < this.children.length - 1) {
+                if(first){
+                    first = false;
+                }else {
                     sb += ', ';
                 }
+                sb += child.toJsonString();
             }
         }
         sb += '}';
@@ -106,7 +113,7 @@ class JsonArray {
     }
 
     removeChildAt(index) {
-        this.children.splice(i, 1);
+        this.children[index].silence = true;
     }
 
     toJsonString() {
@@ -117,12 +124,21 @@ class JsonArray {
         }
 
 
+        let first = true;
         for (let i = 0; i < this.children.length; i++) {
             let child = this.children[i];
-            sb += child.toJsonString();
-            if (i < this.children.length - 1) {
+
+            if (child.silence) {
+                continue;
+            }
+
+            if(first){
+                first = false;
+            }else {
                 sb += ', ';
             }
+            sb += child.toJsonString();
+
         }
         sb += ']';
         return sb;
@@ -155,6 +171,10 @@ class JsonItem {
         } else {
             return run(this, this._mocker);
         }
+    }
+
+    toString(){
+        return this.key;
     }
 }
 

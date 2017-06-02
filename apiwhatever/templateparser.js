@@ -245,6 +245,10 @@ class TemplateParser {
             let dsl = data[item];
 
             let jsonItem = new json.JsonItem(key);
+            let valueOrMocker = singleValueParser.parseDSLToMocker(dsl, template);
+            if(valueOrMocker == null){
+                console.log("---->" + dsl);
+            }
             jsonItem.setValueOrMocker(singleValueParser.parseDSLToMocker(dsl, template));
 
             jsonObject.add(jsonItem);

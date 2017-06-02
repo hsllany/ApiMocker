@@ -20,6 +20,7 @@
   ],
   "main": {
     "name": "class",
+    "filter":"->removeField(groups)",
     "data": {
       "class_name": "->randomString()",
       "status":200,

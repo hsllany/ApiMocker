@@ -28,11 +28,16 @@ let MockerFactory = {
 
         buildRandomArrayOf: function (moduleName, template) {
             return function () {
+                if (!template.modules.hasOwnProperty(moduleName)) {
+                    throw "Can not find ' " + moduleName + " ' in modules";
+                }
+
                 let jsonArray = new json.JsonArray();
 
                 let length = random.randomInt(0, 10);
 
                 for (let i = 0; i < length; i++) {
+
                     jsonArray.add(template.modules[moduleName]);
                 }
 
@@ -43,7 +48,7 @@ let MockerFactory = {
         buildRemoveField: function (fieldName) {
             return function () {
 
-                for(let i = 0; i < fieldName.length; i++){
+                for (let i = 0; i < fieldName.length; i++) {
                     this.removeChild(fieldName[i]);
                 }
             }
