@@ -13,4 +13,4 @@ console.log(singleValueParser._parseFunctionNameAndParams("  functionName(a,123,
 
 console.log(singleValueParser._parseFunctionNameAndParams("  functionName(   lala-land   )"));
 
-console.log(singleValueParser.parseMockDSLToMocker("randomString()", template));
+console.log(singleValueParser.parseDSLToMocker("randomString()", template));

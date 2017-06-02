@@ -2,6 +2,7 @@
   "modules": [
     {
       "name": "student",
+      "filter":"->removeField(age)",
       "data": {
         "age": null,
         "name": "-> randomString()",

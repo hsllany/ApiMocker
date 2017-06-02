@@ -2,7 +2,7 @@ const random = require('./randomutils');
 var json = require('./json');
 
 let MockerFactory = {
-    internal: {
+    mocker: {
         buildRandomString: function () {
             return function () {
                 return random.randomString(random.randomInt(0, 100));
@@ -37,6 +37,15 @@ let MockerFactory = {
                 }
 
                 return jsonArray;
+            }
+        }
+    }, filter: {
+        buildRemoveField: function (fieldName) {
+            return function () {
+
+                for(let i = 0; i < fieldName.length; i++){
+                    this.removeChild(fieldName[i]);
+                }
             }
         }
     }

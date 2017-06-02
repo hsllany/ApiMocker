@@ -1,21 +1,18 @@
 'use strict';
 
-function run(object, mock) {
+/**
+ *
+ * @param json, could be JsonItem, JsonObject or JsonArray
+ * @param mockFunction, function
+ * @returns {*}
+ */
 
+function run(json, mockFunction) {
     let value = null;
 
-    if (typeof mock === 'string') {
-        value = eval(mock);
-        return value;
-    } else if (typeof mock === 'function' && object instanceof Object) {
-        object.mock = mock;
-        value = object.mock();
+    if (typeof mockFunction === 'function' && json instanceof Object) {
 
-        if (object.value != null && typeof (object.value) === 'object') {
-            if ((object.value) instanceof (JsonObject) || (object.value) instanceof (JsonArray)) {
-                return value;
-            }
-        }
+        value = mockFunction.call(json);
 
         if (typeof value === 'string') {
             return '"' + value + '"';
@@ -25,7 +22,7 @@ function run(object, mock) {
             return value;
         }
     } else {
-        throw 'Unknown mock type, must be one of \'string\' or \'function\'';
+        throw 'Unknown mock type, must be \'function\'';
     }
 }
 
@@ -49,7 +46,7 @@ class JsonObject {
      */
     constructor() {
         this.children = [];
-        this.mocker = null;
+        this._filter = null;
         this.parent = null;
     }
 
@@ -58,14 +55,36 @@ class JsonObject {
         jsonItem.parent = this;
     }
 
+    removeChild(childName) {
+        let findIndex = -1;
+        for (let i = 0; i < this.children.length; i++) {
+            let child = this.children[i];
+            if (child.key === childName) {
+                findIndex = i;
+                break;
+            }
+        }
+
+        if (findIndex !== -1) {
+            this.children.splice(findIndex, 1);
+        }
+    }
+
     toJsonString() {
         let sb = '{';
-        let childrenMocked = (this.mocker != null ? mocker.run(this, this.mocker) : this.children );
-        for (let i = 0; i < childrenMocked.length; i++) {
-            let child = childrenMocked[i];
-            sb += child.toJsonString();
-            if (i < childrenMocked.length - 1) {
-                sb += ', ';
+
+        if (this._filter != null) {
+            this._filter.call(this);
+        }
+
+
+        for (let i = 0; i < this.children.length; i++) {
+            let child = this.children[i];
+            if (child instanceof JsonItem) {
+                sb += child.toJsonString();
+                if (i < this.children.length - 1) {
+                    sb += ', ';
+                }
             }
         }
         sb += '}';
@@ -77,7 +96,7 @@ class JsonObject {
 class JsonArray {
     constructor() {
         this.children = [];
-        this.mocker = null;
+        this._filter = null;
         this.parent = null;
     }
 
@@ -86,13 +105,22 @@ class JsonArray {
         jsonItem.parent = this;
     }
 
+    removeChildAt(index) {
+        this.children.splice(i, 1);
+    }
+
     toJsonString() {
         let sb = '[';
-        let childrenMocked = (this.mocker != null ? mocker.run(this, this.mocker) : this.children );
-        for (let i = 0; i < childrenMocked.length; i++) {
-            let child = childrenMocked[i];
+
+        if (this._filter != null) {
+            this._filter.call(this);
+        }
+
+
+        for (let i = 0; i < this.children.length; i++) {
+            let child = this.children[i];
             sb += child.toJsonString();
-            if (i < childrenMocked.length - 1) {
+            if (i < this.children.length - 1) {
                 sb += ', ';
             }
         }
@@ -104,28 +132,28 @@ class JsonArray {
 class JsonItem {
     constructor(key) {
         this.key = key;
-        this.mocker = null;
+        this._mocker = null;
         this.parent = null;
     }
 
     setValueOrMocker(value) {
         if (typeof value === 'function') {
-            this.mocker = value;
+            this._mocker = value;
         } else if (value instanceof JsonObject || value instanceof JsonArray) {
             this.value = value;
             this.value.parent = this;
-            this.mocker = raw;
+            this._mocker = raw;
         } else {
             this.value = value;
-            this.mocker = raw;
+            this._mocker = raw;
         }
     }
 
     toJsonString() {
         if (this.key !== null && this.key !== undefined) {
-            return '"' + this.key + '" : ' + (this.mocker !== null ? run(this, this.mocker) : '"notmocked"');
+            return '"' + this.key + '" : ' + run(this, this._mocker);
         } else {
-            return this.mocker !== null ? run(this, this.mocker) : '"notmocked"';
+            return run(this, this._mocker);
         }
     }
 }

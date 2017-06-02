@@ -15,7 +15,7 @@ String.prototype.endsWith = function (suffix) {
 }
 
 let singleValueParser = {
-    parseMockDSLToMocker: function (value, template) {
+    parseDSLToMocker: function (value, template) {
         if (typeof value === 'string' && value.startsWith("->")) {
             /*
              * functionAndParams should have following fields:
@@ -27,6 +27,21 @@ let singleValueParser = {
             return this._buildMocker(functionAndParams, template);
         } else {
             return value;
+        }
+    },
+
+    parseDSLToFilter: function (filter, template) {
+        if (typeof filter === 'string' && filter.startsWith("->")) {
+            /*
+             * functionAndParams should have following fields:
+             * functionAndParams.name  -string, function name
+             * functionAndParams.params  -Array, params
+             */
+            let functionAndParams = this._parseFunctionNameAndParams(filter.substring(2));
+
+            return this._buildFilter(functionAndParams, template);
+        } else {
+            return null;
         }
     },
 
@@ -109,11 +124,23 @@ let singleValueParser = {
         functionNameToBeMocked = functionNameToBeMocked.toUpperCase() + functionAndParams.name.substring(1);
         functionNameToBeMocked = 'build' + functionNameToBeMocked;
 
-        if (MockerFactory.internal.hasOwnProperty(functionNameToBeMocked) && typeof MockerFactory.internal[functionNameToBeMocked] === 'function') {
-            return MockerFactory.internal[functionNameToBeMocked](functionAndParams.params, template);
+        if (MockerFactory.mocker.hasOwnProperty(functionNameToBeMocked) && typeof MockerFactory.mocker[functionNameToBeMocked] === 'function') {
+            return MockerFactory.mocker[functionNameToBeMocked](functionAndParams.params, template);
         }
 
         return '![NotImplemented : ' + functionAndParams.name + ']';
+    },
+
+    _buildFilter: function (functionAndParams, template) {
+        let functionNameToBeMocked = functionAndParams.name[0];
+        functionNameToBeMocked = functionNameToBeMocked.toUpperCase() + functionAndParams.name.substring(1);
+        functionNameToBeMocked = 'build' + functionNameToBeMocked;
+
+        if (MockerFactory.filter.hasOwnProperty(functionNameToBeMocked) && typeof MockerFactory.filter[functionNameToBeMocked] === 'function') {
+            return MockerFactory.filter[functionNameToBeMocked](functionAndParams.params, template);
+        }
+
+        return null;
     }
 };
 
@@ -164,6 +191,8 @@ class TemplateParser {
         let mainData = main.data;
 
         template.main = TemplateParser.processData(mainData, template);
+
+        TemplateParser.processFilterIfNecessary(main, template.main);
     }
 
     processModules(template) {
@@ -171,7 +200,6 @@ class TemplateParser {
 
         for (let i = 0; i < modules.length; i++) {
             let module = modules[i];
-            console.log("==>" + module.name);
             TemplateParser.processSingleModule(module, template);
         }
     }
@@ -182,8 +210,30 @@ class TemplateParser {
             let jsonObject = TemplateParser.processData(module['data'], template);
 
             template.addModule(moduleName, jsonObject);
+
+            TemplateParser.processFilterIfNecessary(module, jsonObject, template);
         } else {
             throw 'Module must have name and data field';
+        }
+    }
+
+    static processFilterIfNecessary(module, jsonObject, template) {
+        if (module.hasOwnProperty('filter')) {
+            let filterString = module['filter'];
+
+            if (typeof filterString === 'string') {
+                let filterFunction = singleValueParser.parseDSLToFilter(filterString, template);
+
+                if (filterFunction == null) {
+                    return;
+                }
+
+                if (typeof filterFunction === 'function') {
+                    jsonObject._filter = filterFunction;
+                } else {
+                    console.error("Ignore the filter " + filterFunction);
+                }
+            }
         }
     }
 
@@ -195,7 +245,7 @@ class TemplateParser {
             let dsl = data[item];
 
             let jsonItem = new json.JsonItem(key);
-            jsonItem.setValueOrMocker(singleValueParser.parseMockDSLToMocker(dsl, template));
+            jsonItem.setValueOrMocker(singleValueParser.parseDSLToMocker(dsl, template));
 
             jsonObject.add(jsonItem);
         }

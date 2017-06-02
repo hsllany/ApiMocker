@@ -8,7 +8,7 @@ let mocker = require('../apiwhatever/mockerfactory');
 //=================jsonItem example=================
 
 let item1 = new json.JsonItem("keyOne");
-item1.mocker = mocker.randomString;
+item1._filter = mocker.randomString;
 
 console.log(item1.toJsonString());
 console.log('=====================\n');
@@ -17,7 +17,7 @@ console.log('=====================\n');
 //=================jsonTree example=================
 
 let item2 = new json.JsonItem("keyTwo");
-item2.mocker = mocker.buildRandomEnumFunction("nihao", 123, false);
+item2._filter = mocker.buildRandomEnumFunction("nihao", 123, false);
 
 let tree = new json.JsonObject();
 tree.add(item1);
