@@ -2,8 +2,8 @@
  * Created by leeco on 17/5/31.
  */
 
-let json = require('../apimocker/json');
-let mocker = require('../apimocker/mockerfactory');
+let json = require('../apiwhatever/json');
+let mocker = require('../apiwhatever/mockerfactory');
 
 //=================jsonItem example=================
 

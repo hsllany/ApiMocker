@@ -1,7 +1,7 @@
 /**
  * Created by leeco on 17/6/1.
  */
-var TemplateParser = require('../apimocker/templateparser');
+var TemplateParser = require('../apiwhatever/templateparser');
 var jsonRaw = require('../example/test.json');
 
 let jsonParser = new TemplateParser(jsonRaw);

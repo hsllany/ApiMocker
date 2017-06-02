@@ -1,9 +1,9 @@
 /**
  * Created by leeco on 17/6/1.
  */
-var TemplateParser = require('../apimocker/templateparser');
+var TemplateParser = require('../apiwhatever/templateparser');
 var singleValueParser = TemplateParser.singleParser;
-var Template = require('../apimocker/template');
+var Template = require('../apiwhatever/template');
 
 var template = new Template();
 

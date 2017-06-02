@@ -2,7 +2,7 @@
  * Created by leeco on 17/5/24.
  */
 
-const json = require('../apimocker/json');
+const json = require('../apiwhatever/json');
 
 let jsonItem = new json.JsonItem("he", "world");
 console.log(jsonItem.toJsonString());
