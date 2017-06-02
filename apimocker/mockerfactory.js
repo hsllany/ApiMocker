@@ -26,7 +26,7 @@ let MockerFactory = {
 
         },
 
-        buildArrayOf: function (moduleName, template) {
+        buildRandomArrayOf: function (moduleName, template) {
             return function () {
                 let jsonArray = new json.JsonArray();
 

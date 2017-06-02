@@ -244,7 +244,7 @@ class TemplateParser {
 
             if (typeof data === 'object') {
                 for (let x in data) {
-                    if (typeof data[x] === 'object') {
+                    if (!TemplateParser._isValidField(data[x])) {
                         throw 'Module\'s data should contain only primary type.';
                     }
                 }
@@ -254,9 +254,15 @@ class TemplateParser {
         } else {
             throw 'Module must have data field.'
         }
-
-
     };
+
+    static _isValidField(field){
+        if(typeof field === 'object'){
+            return field === null || field === undefined;
+        }
+
+        return true;
+    }
 }
 
 

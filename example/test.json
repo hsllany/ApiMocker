@@ -3,7 +3,7 @@
     {
       "name": "student",
       "data": {
-        "age": "r)",
+        "age": null,
         "name": "-> randomString()",
         "sex": "->randomEnum(boy, girl)",
         "constant": 123
@@ -21,7 +21,7 @@
     "data": {
       "class_name": "->randomString()",
       "status":200,
-      "students": "->arrayOf(student)"
+      "students": "->randomArrayOf(student)"
     }
   }
 }

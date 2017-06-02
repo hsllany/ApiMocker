@@ -31,6 +31,11 @@ function run(object, mock) {
 
 function raw() {
     let value = this.value;
+
+    if(value === null || value === undefined){
+        return null;
+    }
+
     if (value['toJsonString'] != null && typeof value['toJsonString'] === 'function') {
         return value.toJsonString();
     } else {
