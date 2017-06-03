@@ -9,11 +9,11 @@ let template = jsonParser.process();
 
 console.log(template);
 
-console.log(template.modules["student"].toJsonString());
+// console.log(template.modules["student"].toJsonString());
 
-let jsonObject = template.modules['group'];
+// let jsonObject = template.modules['group'];
 
-console.log(jsonObject.toJsonString());
+// console.log(jsonObject.toJsonString());
 
 let mainObject = template.main;
 

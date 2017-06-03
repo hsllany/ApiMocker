@@ -1,0 +1,24 @@
+{
+  "name": "apiwhatever",
+  "version": "0.6.4",
+  "description": "Mock API as easy & flexble as possible.",
+  "main": "index.js",
+  "scripts": {
+    "test": "apiwhatever"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hsllany/apiwhatever.git"
+  },
+  "keywords": [
+    "json",
+    "api",
+    "mock"
+  ],
+  "author": "hsllany",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hsllany/apiwhatever/issues"
+  },
+  "homepage": "https://github.com/hsllany/apiwhatever#readme"
+}

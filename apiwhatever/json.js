@@ -3,26 +3,25 @@
 /**
  *
  * @param json, could be JsonItem, JsonObject or JsonArray
- * @param mockFunction, function
+ * @param mockFunction, fun
  * @returns {*}
  */
 
-function run(json, mockFunction) {
-    let value = null;
+function debug(object, msg) {
+    console.log('\n-----start-------');
+    console.log(object);
+    console.log(msg);
+    console.log('-----e n d-------')
+}
 
-    if (typeof mockFunction === 'function' && json instanceof Object) {
+class MockFunction {
+    constructor() {
+        this.func = null;
+        this.params = null;
+    }
 
-        value = mockFunction.call(json);
-
-        if (typeof value === 'string') {
-            return '"' + value + '"';
-        } else if (value instanceof JsonArray || value instanceof JsonObject) {
-            return value.toJsonString();
-        } else {
-            return value;
-        }
-    } else {
-        throw 'Unknown mock type, must be \'function\'' + mockFunction + ' of ' + json.toString();
+    call(thisArgs) {
+        return this.func.apply(thisArgs, this.params);
     }
 }
 
@@ -42,12 +41,16 @@ function raw() {
 
 class JsonObject {
     /**
-     * @param mocker should be one of 'function' or a piece of script string.
+     * @param mocker should be one of 'fun' or a piece of script string.
      */
-    constructor() {
+    constructor(template) {
+        if (template == null) {
+            throw 'Template can\'t be null when new an JsonObject';
+        }
         this.children = [];
         this._filter = null;
         this.parent = null;
+        this.template = template;
     }
 
     add(jsonItem) {
@@ -70,6 +73,15 @@ class JsonObject {
         }
     }
 
+    setFilter(func, params) {
+        if (this._filter == null) {
+            this._filter = new MockFunction();
+        }
+
+        this._filter.func = func;
+        this._filter.params = params;
+    }
+
     toJsonString() {
         let sb = '{';
 
@@ -86,9 +98,9 @@ class JsonObject {
             }
 
             if (child instanceof JsonItem) {
-                if(first){
+                if (first) {
                     first = false;
-                }else {
+                } else {
                     sb += ', ';
                 }
                 sb += child.toJsonString();
@@ -101,15 +113,28 @@ class JsonObject {
 
 
 class JsonArray {
-    constructor() {
+    constructor(template) {
+        if (template == null) {
+            throw 'Template can\'t be null when new an JsonArray';
+        }
         this.children = [];
         this._filter = null;
         this.parent = null;
+        this.template = template;
     }
 
     add(jsonItem) {
         this.children.push(jsonItem);
         jsonItem.parent = this;
+    }
+
+    setFilter(func, params) {
+        if (this._filter == null) {
+            this._filter = new MockFunction();
+        }
+
+        this._filter.func = func;
+        this._filter.params = params;
     }
 
     removeChildAt(index) {
@@ -132,9 +157,9 @@ class JsonArray {
                 continue;
             }
 
-            if(first){
+            if (first) {
                 first = false;
-            }else {
+            } else {
                 sb += ', ';
             }
             sb += child.toJsonString();
@@ -146,34 +171,60 @@ class JsonArray {
 }
 
 class JsonItem {
-    constructor(key) {
+    constructor(key, template) {
+        if (template == null) {
+            throw 'Template can\'t be null when new an JsonItem with key=' + key;
+        }
         this.key = key;
-        this._mocker = null;
+        this._mocker = new MockFunction();
         this.parent = null;
+        this.template = template;
     }
 
-    setValueOrMocker(value) {
-        if (typeof value === 'function') {
-            this._mocker = value;
-        } else if (value instanceof JsonObject || value instanceof JsonArray) {
-            this.value = value;
-            this.value.parent = this;
-            this._mocker = raw;
+    setMocker(funct, params) {
+        if (typeof funct === 'function' && params instanceof Array) {
+            this._mocker.func = funct;
+            this._mocker.params = params;
         } else {
-            this.value = value;
-            this._mocker = raw;
+            throw 'func should be a function, params should be an array, where func=' + (typeof funct) + ', params=' + params;
         }
+    }
+
+    setValue(value) {
+        this.value = value;
+        if (value instanceof JsonObject || value instanceof JsonArray) {
+            this.value.parent = this;
+        }
+
+        this._mocker.func = raw;
+        this._mocker.params = [];
     }
 
     toJsonString() {
         if (this.key !== null && this.key !== undefined) {
-            return '"' + this.key + '" : ' + run(this, this._mocker);
+            return '"' + this.key + '" : ' + JsonItem.run(this);
         } else {
             return run(this, this._mocker);
         }
     }
 
-    toString(){
+    static run(jsonItem) {
+        if (!jsonItem instanceof JsonItem) {
+            throw 'jsonItem must be an JsonItem, jsonItem=' + jsonItem;
+        }
+        let value = null;
+        let mocker = jsonItem._mocker;
+        value = mocker.call(jsonItem);
+        if (typeof value === 'string') {
+            return '"' + value + '"';
+        } else if (value instanceof JsonArray || value instanceof JsonObject) {
+            return value.toJsonString();
+        } else {
+            return value;
+        }
+    }
+
+    toString() {
         return this.key;
     }
 }

@@ -2,9 +2,10 @@
   "modules": [
     {
       "name": "student",
+      "filter": "->removeField(constant)",
       "data": {
         "age": "->randomInt(18, 20)",
-        "name": "-> randomString()",
+        "name": "-> randomEnum(Mike, Peter, John, Jenny, Sheldon, Kobe)",
         "sex": "->randomEnum(boy, girl)",
         "height": "->randomNumber(12.3, 55.8)",
         "isTransfer": "->randomBoolean()",
@@ -14,7 +15,7 @@
     {
       "name": "group",
       "data": {
-        "name": "->randomString()",
+        "name": "->groupName()",
         "students": "->randomArrayOf(student)"
       }
     }

@@ -26,12 +26,12 @@ tree.add(item2);
 
 let childTree = new json.JsonObject();
 let childItem1 = new json.JsonItem("childKeyOne");
-childItem1.setValueOrMocker("childValueOne");
+childItem1.setValue("childValueOne");
 
 childTree.add(childItem1);
 
 let childTreeItem = new json.JsonItem("childTree");
-childTreeItem.setValueOrMocker(childTree);
+childTreeItem.setValue(childTree);
 
 tree.add(childTreeItem);
 console.log(tree.toJsonString());

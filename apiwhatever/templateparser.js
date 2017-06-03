@@ -12,14 +12,21 @@ String.prototype.startsWith = function (prefix) {
 
 String.prototype.endsWith = function (suffix) {
     return this.indexOf(suffix, this.length - suffix.length) !== -1;
-}
+};
 
 let singleValueParser = {
+
+    /**
+     * return mocker(func, params) or raw value( one of string, boolean, ect)
+     * @param value
+     * @param template
+     * @returns {*}
+     */
     parseDSLToMocker: function (value, template) {
         if (typeof value === 'string' && value.startsWith("->")) {
             /*
              * functionAndParams should have following fields:
-             * functionAndParams.name  -string, function name
+             * functionAndParams.name  -string, fun name
              * functionAndParams.params  -Array, params
              */
             let functionAndParams = this._parseFunctionNameAndParams(value.substring(2));
@@ -34,7 +41,7 @@ let singleValueParser = {
         if (typeof filter === 'string' && filter.startsWith("->")) {
             /*
              * functionAndParams should have following fields:
-             * functionAndParams.name  -string, function name
+             * functionAndParams.name  -string, fun name
              * functionAndParams.params  -Array, params
              */
             let functionAndParams = this._parseFunctionNameAndParams(filter.substring(2));
@@ -50,7 +57,7 @@ let singleValueParser = {
         let c = '\t';
         let position;
 
-        //look for function name
+        //look for fun name
         for (position = -1; position < value.length; position++) {
             if (position !== -1) {
                 c = value[position];
@@ -124,30 +131,20 @@ let singleValueParser = {
     },
 
     _buildMocker: function (functionAndParams, template) {
-        let functionNameToBeMocked = functionAndParams.name[0];
-        functionNameToBeMocked = functionNameToBeMocked.toUpperCase() + functionAndParams.name.substring(1);
-        functionNameToBeMocked = 'build' + functionNameToBeMocked;
-
-        if (MockerFactory.mocker.hasOwnProperty(functionNameToBeMocked) && typeof MockerFactory.mocker[functionNameToBeMocked] === 'function') {
-            let mockParams = [];
-            mockParams.push(template);
-            mockParams = mockParams.concat(functionAndParams.params);
-            return MockerFactory.mocker[functionNameToBeMocked].apply(null, mockParams);
+        if (MockerFactory.internal.mocker.hasOwnProperty(functionAndParams.name) && typeof MockerFactory.internal.mocker[functionAndParams.name] === 'function') {
+            return {func: MockerFactory.internal.mocker[functionAndParams.name], params: functionAndParams.params};
+        } else if (MockerFactory.external.mocker.hasOwnProperty(functionAndParams.name) && typeof MockerFactory.external.mocker[functionAndParams.name] === 'function') {
+            return {func: MockerFactory.external.mocker[functionAndParams.name], params: functionAndParams.params};
         }
 
         return '![NotImplemented : ' + functionAndParams.name + ']';
     },
 
     _buildFilter: function (functionAndParams, template) {
-        let functionNameToBeMocked = functionAndParams.name[0];
-        functionNameToBeMocked = functionNameToBeMocked.toUpperCase() + functionAndParams.name.substring(1);
-        functionNameToBeMocked = 'build' + functionNameToBeMocked;
-
-        if (MockerFactory.filter.hasOwnProperty(functionNameToBeMocked) && typeof MockerFactory.filter[functionNameToBeMocked] === 'function') {
-            let mockParams = [];
-            mockParams.push(template);
-            mockParams = mockParams.concat(functionAndParams.params);
-            return MockerFactory.filter[functionNameToBeMocked].apply(null, mockParams);
+        if (MockerFactory.internal.filter.hasOwnProperty(functionAndParams.name) && typeof MockerFactory.internal.filter[functionAndParams.name] === 'function') {
+            return {func: MockerFactory.internal.filter[functionAndParams.name], params: functionAndParams.params};
+        } else if (MockerFactory.external.filter.hasOwnProperty(functionAndParams.name) && typeof MockerFactory.external.filter[functionAndParams.name] === 'function') {
+            return {func: MockerFactory.external.filter[functionAndParams.name], params: functionAndParams.params};
         }
 
         return null;
@@ -238,8 +235,8 @@ class TemplateParser {
                     return;
                 }
 
-                if (typeof filterFunction === 'function') {
-                    jsonObject._filter = filterFunction;
+                if (TemplateParser._isMocker(filterFunction)) {
+                    jsonObject.setFilter(filterFunction.func, filterFunction.params);
                 } else {
                     console.error("Ignore the filter " + filterFunction);
                 }
@@ -248,20 +245,39 @@ class TemplateParser {
     }
 
     static processData(data, template) {
-        let jsonObject = new json.JsonObject();
+        let jsonObject = new json.JsonObject(template);
 
         for (let item in data) {
             let key = item;
             let dsl = data[item];
 
-            let jsonItem = new json.JsonItem(key);
-            let valueOrMocker = singleValueParser.parseDSLToMocker(dsl, template);
-            jsonItem.setValueOrMocker(singleValueParser.parseDSLToMocker(dsl, template));
+            let jsonItem = new json.JsonItem(key, template);
+
+            let mockerOrValue = singleValueParser.parseDSLToMocker(dsl, template);
+            if (TemplateParser._isMocker(mockerOrValue)) {
+                jsonItem.setMocker(mockerOrValue.func, mockerOrValue.params);
+            } else {
+                jsonItem.setValue(mockerOrValue);
+            }
 
             jsonObject.add(jsonItem);
         }
 
         return jsonObject;
+    }
+
+    static _isMocker(mockerToTest) {
+        if (mockerToTest == null) {
+            return false;
+        }
+        if (mockerToTest.hasOwnProperty('func') && mockerToTest.hasOwnProperty('params')) {
+            let func = mockerToTest['func'];
+            let params = mockerToTest['params'];
+
+            return typeof func === 'function' && params instanceof Array;
+        }
+
+        return false;
     }
 
 

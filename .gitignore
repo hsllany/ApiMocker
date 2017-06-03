@@ -1,9 +1,1 @@
-.idea/
-bin/
-node_modules
-public
-routes
-views
-app.js
-package.json
-test.js
+.idea

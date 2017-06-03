@@ -2,78 +2,46 @@ const random = require('./randomutils');
 var json = require('./json');
 
 let MockerFactory = {
-    mocker: {
-        buildRandomString: function () {
-            return function () {
+    internal: {
+        mocker: {
+            randomString: function () {
                 return random.randomString(random.randomInt(0, 100));
-            }
-        },
 
-        buildRandomInt: function (template) {
-            let min = 0;
-            let max = 100;
+            },
 
-            if (arguments.length > 1) {
-                min = parseInt(arguments[1]);
-            }
-
-            if (arguments.length > 2) {
-                max = parseInt(arguments[2]);
-            }
-
-            return function () {
-                let r = random.randomInt(min, max);
+            randomInt: function (min = 0, max = 100) {
+                let r = random.randomInt(parseInt(min), parseInt(max));
                 return r;
-            }
-        },
 
-        buildRandomBoolean: function (template) {
-            return function () {
+            },
+
+            randomBoolean: function () {
                 return random.randomBoolean();
-            }
-        },
 
-        buildRandomNumber: function (template) {
-            let min = 0;
-            let max = 100;
+            },
 
-            if (arguments.length > 1) {
-                min = parseFloat(arguments[1]);
-            }
-
-            if (arguments.length > 2) {
-                max = parseFloat(arguments[2]);
-            }
-
-            return function () {
-                let r = random.randomNumber(min, max);
+            randomNumber: function (min = 0, max = 100) {
+                let r = random.randomNumber(parseFloat(min), parseFloat(max));
                 return r;
-            }
-        },
+            },
 
-        buildRandomStringOrNull: function () {
-            let r = random.randomBoolean();
-            return r ? this.randomString() : 'null';
-        },
+            randomStringOrNull: function () {
+                let r = random.randomBoolean();
+                return r ? this.randomString() : 'null';
+            },
 
-        buildRandomEnum: function (template) {
+            randomEnum: function () {
+                let index = random.randomInt(0, arguments.length - 1);
+                return arguments[index];
+            },
 
-            let outerArguments = arguments;
-            let number = arguments.length;
+            randomArrayOf: function (moduleName, number = 10) {
+                let template = this.template;
 
-            return function () {
-                let index = random.randomInt(1, number - 1);
-                return outerArguments[index];
-            }
-
-        },
-
-        buildRandomArrayOf: function (template, moduleName, number = 10) {
-            return function () {
                 if (!template.modules.hasOwnProperty(moduleName)) {
                     throw "Can not find ' " + moduleName + " ' in modules";
                 }
-                let jsonArray = new json.JsonArray();
+                let jsonArray = new json.JsonArray(template);
                 number = parseInt(number);
                 let length = random.randomInt(0, number);
 
@@ -82,21 +50,19 @@ let MockerFactory = {
                 }
 
                 return jsonArray;
+
             }
-        }
-    }, filter: {
-        buildRemoveField: function (template, fieldName) {
-            let outArgments = arguments;
-
-            return function () {
-
-                for (let i = 1; i < outArgments.length; i++) {
-                    this.removeChild(outArgments[i]);
+        }, filter: {
+            removeField: function () {
+                for (let i = 0; i < arguments.length; i++) {
+                    this.removeChild(arguments[i]);
                 }
             }
         }
+    }, external: {
+        mocker: {}, filter: {}
     }
-}
+};
 
 module.exports = MockerFactory;
 
