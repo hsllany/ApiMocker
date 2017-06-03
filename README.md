@@ -1,6 +1,8 @@
 ApiWhatever
 ========
 
+[![Build Status](https://travis-ci.org/hsllany/apiwhatever.svg?branch=master)](https://travis-ci.org/hsllany/apiwhatever)
+
 # Brief
 
 Try to mock Json API as easy & flexible as possible according to a JSON template. 
