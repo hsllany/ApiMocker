@@ -8,7 +8,7 @@
         "name": "-> randomEnum(Mike, Peter, John, Jenny, Sheldon, Kobe)",
         "sex": "->randomEnum(boy, girl)",
         "height": "->randomNumber(12.3, 55.8)",
-        "isTransfer": "->randomBoolean()",
+        "isTransfer": "->Date.now()",
         "constant": null
       }
     },

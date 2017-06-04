@@ -135,9 +135,22 @@ let singleValueParser = {
             return {func: MockerFactory.internal.mocker[functionAndParams.name], params: functionAndParams.params};
         } else if (MockerFactory.external.mocker.hasOwnProperty(functionAndParams.name) && typeof MockerFactory.external.mocker[functionAndParams.name] === 'function') {
             return {func: MockerFactory.external.mocker[functionAndParams.name], params: functionAndParams.params};
-        }
+        } else {
+            let sb = '(';
+            let first = true;
+            for (let p in functionAndParams.params) {
+                if (first) {
+                    sb += p;
+                    first = false;
+                } else {
+                    sb += ',' + p;
+                }
+            }
+            sb += ')';
 
-        return '![NotImplemented : ' + functionAndParams.name + ']';
+            let fun = new Function("return eval(\"" + functionAndParams.name + sb + "\");");
+            return {func: fun, params: []};
+        }
     },
 
     _buildFilter: function (functionAndParams, template) {
@@ -145,9 +158,22 @@ let singleValueParser = {
             return {func: MockerFactory.internal.filter[functionAndParams.name], params: functionAndParams.params};
         } else if (MockerFactory.external.filter.hasOwnProperty(functionAndParams.name) && typeof MockerFactory.external.filter[functionAndParams.name] === 'function') {
             return {func: MockerFactory.external.filter[functionAndParams.name], params: functionAndParams.params};
-        }
+        } else {
+            let sb = '(';
+            let first = true;
+            for (let p in functionAndParams.params) {
+                if (first) {
+                    sb += p;
+                    first = false;
+                } else {
+                    sb += ',' + p;
+                }
+            }
+            sb += ')';
 
-        return null;
+            let fun = new Function("return eval(\"" + functionAndParams.name + sb + "\");");
+            return {func: fun, params: []};
+        }
     }
 };
 

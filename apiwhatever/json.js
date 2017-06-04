@@ -212,6 +212,7 @@ class JsonItem {
         if (!jsonItem instanceof JsonItem) {
             throw 'jsonItem must be an JsonItem, jsonItem=' + jsonItem;
         }
+
         let value = null;
         let mocker = jsonItem._mocker;
         value = mocker.call(jsonItem);

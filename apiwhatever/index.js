@@ -14,7 +14,7 @@ let apiwhatever = {
 
             return template.main.toJsonString();
         } catch (e) {
-            console.log(e);
+            console.error(e);
         }
     },
 

@@ -8,22 +8,21 @@ function randomNumber(min = 0, max = 100) {
     return Math.random() * (max - min) + min;
 }
 
-const ABC = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$';
 
-function randomString(number = 20) {
+function randomString(number = 20, charset) {
     let sb = "";
 
     for (let i = 0; i < number; i++) {
-        let index = randomInt(0, ABC.length - 1);
-        sb += ABC[index];
+        let index = randomInt(0, charset.length - 1);
+        sb += charset[index];
     }
 
     return sb;
 }
 
-function randomBoolean() {
-    let r = randomInt(0, 1);
-    if (r === 1) {
+function randomBoolean(trueProbability = 0.5) {
+    let r = randomInt(0, 100);
+    if (r < trueProbability * 100) {
         return true;
     }
     return false;
