@@ -20,15 +20,18 @@ let MockerFactory = {
                 }
                 if (length === 'random') {
                     return random.randomString(random.randomInt(0, 100), charset);
-                } else if (typeof length === 'number') {
-                    return random.randomString(length, charset);
                 } else {
-                    console.warn('Unknown length ' + length + " when randomString().");
-                    return random.randomString(random.randomInt(0, 100), charset);
+                    try {
+                        length = parseInt(length);
+                        return random.randomString(length, charset);
+                    } catch (e) {
+                        console.warn('Unknown length ' + length + " when randomString().");
+                        return random.randomString(random.randomInt(0, 100), charset);
+                    }
                 }
             },
 
-            objectOf: function(moduleName){
+            objectOf: function (moduleName) {
                 let template = this.template;
 
                 if (!template.modules.hasOwnProperty(moduleName)) {
@@ -45,7 +48,7 @@ let MockerFactory = {
             },
 
             randomBoolean: function (trueProbablity = 0.5) {
-                return random.randomBoolean();
+                return random.randomBoolean(parseFloat(trueProbablity));
 
             },
 
@@ -55,12 +58,13 @@ let MockerFactory = {
             },
 
             randomStringOrNull: function (nullProbability = 0.5) {
+                nullProbability = parseFloat(nullProbability);
                 let r = random.randomBoolean(nullProbability);
                 return !r ? MockerFactory.internal.mocker.randomString() : 'null';
             },
 
             randomIntOrNull: function (nullProbability = 0.5, min = 0, max = 100) {
-                let r = random.randomBoolean(nullProbability);
+                let r = random.randomBoolean(parseFloat(nullProbability));
                 return !r ? MockerFactory.internal.mocker.randomInt(min, max) : 'null';
             },
 
@@ -83,6 +87,8 @@ let MockerFactory = {
             },
 
             randomArrayOf: function (moduleName, min = 0, max = 10) {
+                min = parseInt(min);
+                max = parseInt(max);
                 if (typeof min !== 'number' || typeof max !== 'number' || min * max < 0 || min > max) {
                     throw 'Min and max must be positive, number and max > min when randomArrayOf().';
                 }
@@ -93,8 +99,6 @@ let MockerFactory = {
                     throw "Can not find ' " + moduleName + " ' in modules";
                 }
                 let jsonArray = new json.JsonArray(template);
-                min = parseInt(min);
-                max = parseInt(max);
                 let length = random.randomInt(min, max);
 
                 for (let i = 0; i < length; i++) {
@@ -106,6 +110,7 @@ let MockerFactory = {
             },
 
             fixedNumberArrayOf: function (moduleNme, number = 10) {
+                number = parseInt(number);
                 if (typeof number === 'number' || number < 0) {
                     throw 'ArrayNumber must be positive when fixedNumberArrayOf()';
                 }
