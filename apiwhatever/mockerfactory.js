@@ -115,7 +115,7 @@ let MockerFactory = {
                     throw 'ArrayNumber must be positive when fixedNumberArrayOf()';
                 }
 
-                let template = this.template;
+                let template = this.getTemplate();
                 if (!template.modules.hasOwnProperty(moduleNme)) {
                     throw "Can't find  '" + moduleNme + "' in modules";
                 }

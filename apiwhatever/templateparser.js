@@ -207,6 +207,8 @@ class TemplateParser {
     process() {
         let template = new Template();
 
+        this.processContext(template);
+
         if (this._hasModules()) {
             this.processModules(template);
         }
@@ -215,6 +217,12 @@ class TemplateParser {
 
         //TODO handle the main_module parts
         return template;
+    }
+
+    processContext(template) {
+        if (this.rawData.context != null) {
+            template.context = this.rawData.context;
+        }
     }
 
     processMainModule(template) {

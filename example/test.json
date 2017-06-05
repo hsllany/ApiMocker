@@ -1,4 +1,7 @@
 {
+  "context": {
+    "hello": "world"
+  },
   "modules": [
     {
       "name": "student",

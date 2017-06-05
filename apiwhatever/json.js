@@ -124,6 +124,14 @@ class JsonObject {
             }
         }
     }
+
+    getTemplate() {
+        return this.template;
+    }
+
+    getTemplateContext() {
+        return this.template.context;
+    }
 }
 
 
@@ -199,6 +207,14 @@ class JsonArray {
         } else {
             return null;
         }
+    }
+
+    getTemplate() {
+        return this.template;
+    }
+
+    getTemplateContext() {
+        return this.template.context;
     }
 }
 
@@ -280,6 +296,14 @@ class JsonItem {
 
     getKey() {
         return this.key;
+    }
+
+    getTemplate() {
+        return this.template;
+    }
+
+    getTemplateContext() {
+        return this.template.context;
     }
 }
 
