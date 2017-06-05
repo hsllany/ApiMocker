@@ -25,6 +25,7 @@
     "data": {
       "class_name": "->randomString()",
       "status": 200,
+      "singleStudent":"->objectOf(student)",
       "groups": "->randomArrayOf(group)"
     }
   }

@@ -1,6 +1,6 @@
 {
   "name": "apiwhatever",
-  "version": "0.6.4",
+  "version": "0.6.6",
   "description": "Mock API as easy & flexble as possible.",
   "main": "index.js",
   "scripts": {

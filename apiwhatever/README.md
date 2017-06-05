@@ -1,6 +1,8 @@
 ApiWhatever
 ========
 
+[![Build Status](https://travis-ci.org/hsllany/apiwhatever.svg?branch=master)](https://travis-ci.org/hsllany/apiwhatever)
+
 # Brief
 
 Try to mock Json API as easy & flexible as possible according to a JSON template. 
@@ -170,4 +172,44 @@ apiwhatever.registerMocker('groupName', function () {
 });
 ```
 
+## About The API's Template
+
+The ApiWhatever's API Template is a json file like this:
+
+
+```json
+{
+  "modules": [
+    {
+      "name": "student",
+      "filter": "->removeField(constant)",
+      "data": {
+        "age": "->randomInt(18, 20)",
+        "name": "-> randomEnum(Mike, Peter, John, Jenny, Sheldon, Kobe)",
+        "sex": "->randomEnum(boy, girl)",
+        "height": "->randomNumber(12.3, 55.8)",
+        "isTransfer": "->Date.now()",
+        "constant": null
+      }
+    },
+    {
+      "name": "group",
+      "data": {
+        "name": "->groupName()",
+        "students": "->randomArrayOf(student)"
+      }
+    }
+  ],
+  "main": {
+    "name": "class",
+    "data": {
+      "class_name": "->randomString()",
+      "status": 200,
+      "groups": "->randomArrayOf(group)"
+    }
+  }
+}
+```
+
+It consists of two parts, modules and main.
 

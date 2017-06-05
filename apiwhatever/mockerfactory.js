@@ -28,6 +28,16 @@ let MockerFactory = {
                 }
             },
 
+            objectOf: function(moduleName){
+                let template = this.template;
+
+                if (!template.modules.hasOwnProperty(moduleName)) {
+                    throw "Can not find ' " + moduleName + " ' in modules";
+                }
+
+                return template.modules[moduleName];
+            },
+
             randomInt: function (min = 0, max = 100) {
                 let r = random.randomInt(parseInt(min), parseInt(max));
                 return r;
