@@ -51,6 +51,7 @@ class JsonObject {
         this._filter = null;
         this.parent = null;
         this.template = template;
+        this.valueHolder = {};
     }
 
     add(jsonItem) {
@@ -109,6 +110,20 @@ class JsonObject {
         sb += '}';
         return sb;
     }
+
+    getParent() {
+        return this.parent;
+    }
+
+    getValue(key) {
+        for (let i = 0; i < this.children.length; i++) {
+            let child = this.children[i];
+
+            if (child.key === key) {
+                return child.getValue();
+            }
+        }
+    }
 }
 
 
@@ -121,6 +136,7 @@ class JsonArray {
         this._filter = null;
         this.parent = null;
         this.template = template;
+        this.valueHolder = {};
     }
 
     add(jsonItem) {
@@ -168,6 +184,22 @@ class JsonArray {
         sb += ']';
         return sb;
     }
+
+    getParent() {
+        return this.parent;
+    }
+
+    getChildrenCount() {
+        return this.children.length;
+    }
+
+    getChild(index) {
+        if (index >= 0 && index < this.getChildrenCount()) {
+            return this.children[index];
+        } else {
+            return null;
+        }
+    }
 }
 
 class JsonItem {
@@ -179,15 +211,19 @@ class JsonItem {
         this._mocker = new MockFunction();
         this.parent = null;
         this.template = template;
+        this.valueHolder = {};
     }
 
     setMocker(funct, params) {
         if (typeof funct === 'function' && params instanceof Array) {
             this._mocker.func = funct;
             this._mocker.params = params;
+            this._loadValue();
         } else {
             throw 'func should be a function, params should be an array, where func=' + (typeof funct) + ', params=' + params;
         }
+
+
     }
 
     setValue(value) {
@@ -198,17 +234,22 @@ class JsonItem {
 
         this._mocker.func = raw;
         this._mocker.params = [];
+
+        this._loadValue();
     }
 
     toJsonString() {
         if (this.key !== null && this.key !== undefined) {
-            return '"' + this.key + '" : ' + JsonItem.run(this);
-        } else {
-            return run(this, this._mocker);
+            return '"' + this.valueHolder.key + '" : ' + this.valueHolder.value;
         }
     }
 
-    static run(jsonItem) {
+    _loadValue() {
+        this.valueHolder.key = this.key;
+        this.valueHolder.value = JsonItem._run(this);
+    }
+
+    static _run(jsonItem) {
         if (!jsonItem instanceof JsonItem) {
             throw 'jsonItem must be an JsonItem, jsonItem=' + jsonItem;
         }
@@ -226,6 +267,18 @@ class JsonItem {
     }
 
     toString() {
+        return this.key;
+    }
+
+    getParent() {
+        return this.parent;
+    }
+
+    getValue() {
+        return this.valueHolder.value;
+    }
+
+    getKey() {
         return this.key;
     }
 }

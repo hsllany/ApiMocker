@@ -129,10 +129,20 @@ let MockerFactory = {
             }
         }, filter: {
             removeField: function () {
-                for (let i = 0; i < arguments.length; i++) {
-                    this.removeChild(arguments[i]);
+                if (this instanceof json.JsonObject) {
+                    for (let i = 0; i < arguments.length; i++) {
+                        this.removeChild(arguments[i]);
+                    }
+                } else if (this instanceof json.JsonArray) {
+                    console.warn('JsonArray dose not support this operation, please use removeChild(index) instead.')
                 }
-            }
+            },
+
+            randomRemoveField: function () {
+
+            },
+
+
         }
     }, external: {
         mocker: {}, filter: {}
